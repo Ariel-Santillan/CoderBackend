@@ -1,0 +1,38 @@
+<div style="flex" >Bienvenido {{firstName}} {{lastName}}
+  <p>Edad: {{age}}</p>
+  <p>Role: {{role}}</p>
+
+  <button type="button" id="logout">Logout</button>
+</div>
+
+
+{{#if products.isValid}}
+<div>
+  <h1>Productos</h1>
+  <ul>
+    {{#each this.products.docs}}
+      <li class="card">
+        <p>{{this.title}}</p>
+        <p>$ {{this.price}}</p>
+        <img src={{this.thumbnail}} alt={{this.title}} />
+  		  <a href="#" class="card-link">Agregar al carrito</a>
+      </li>
+    {{/each}}
+  </ul>
+</div>
+
+<div style="display: flex">
+  {{#if products.hasPrevPage}}
+  <a href={{this.products.prevLink}}> Anterior</a>
+  {{/if}}
+
+<p>{{products.page}}</p>
+
+<div style="display: flex">
+  {{#if products.hasNextPage}}
+    <a href={{this.products.nextLink}}>Siguiente</a>
+  {{/if}}
+</div>
+{{/if}}
+
+<script src="/js/logout.js"></script>
