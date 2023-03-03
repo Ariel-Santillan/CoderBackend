@@ -12,6 +12,9 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const connectMongo = require('connect-mongo')
 const sessionRouter = require('./routes/session.router')
+const { InitPassport } = require('./utils/passport.config')
+const passport = require('passport')
+const { initialize } = require('passport')
 
 //Express
 server.use(express.json())
@@ -43,6 +46,11 @@ server.use(
     saveUninitialized: true,
   })
 )
+
+//Passport
+InitPassport()
+server.use(passport.initialize())
+server.use(passport.session())
 
 //Routes
 server.use('/api/products', productRouter)

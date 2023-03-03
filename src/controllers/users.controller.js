@@ -15,6 +15,7 @@ const login = async (req, res) => {
       res.send(user)
     } else{
       user = await UsersManagerMongo.login(email, password)
+      console.log(user);
       if (user) {
         req.session.user = user
         res.send({
