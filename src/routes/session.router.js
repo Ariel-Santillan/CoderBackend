@@ -1,11 +1,15 @@
 const { Router } = require('express')
 const usersController = require('../controllers/users.controller')
 const passport = require('passport')
-const { STRATEGY_REGISTER } = require('../utils/constants')
+const { STRATEGY_REGISTER, STRATEGY_LOGIN } = require('../utils/constants')
 
 const router = Router()
 
-router.post('/login', usersController.login)
+router.post(
+  '/login',
+  passport.authenticate(STRATEGY_LOGIN),
+  usersController.login
+)
 
 router.post(
   '/register',
