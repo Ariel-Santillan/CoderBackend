@@ -5,6 +5,7 @@ const { passwordHash, passwordCompare } = require('./bcrypt')
 const { STRATEGY_REGISTER, STRATEGY_LOGIN } = require('./constants')
 
 const InitPassport = () => {
+  //Register
   passport.use(
     STRATEGY_REGISTER,
     new local.Strategy(
@@ -36,6 +37,7 @@ const InitPassport = () => {
     )
   )
 
+  //Login
   passport.use(
     STRATEGY_LOGIN,
     new local.Strategy(
@@ -59,9 +61,12 @@ const InitPassport = () => {
     )
   )
 
+  //Serialize user
   passport.serializeUser((user, done) => {
     done(null, user._id)
   })
+
+  //Deserialize user
   passport.deserializeUser(async (id, done) => {
     const user = await UsersModel.findById(id)
     done(null, user)
