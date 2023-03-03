@@ -8,13 +8,23 @@ const router = Router()
 router.post(
   '/login',
   passport.authenticate(STRATEGY_LOGIN),
-  usersController.login
+  async (req, res) => {
+    req.session.user = {
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      age: req.user.age,
+      email: req.user.email
+    }
+    res.send(req.user)
+  }
 )
 
 router.post(
   '/register',
   passport.authenticate(STRATEGY_REGISTER),
-  usersController.register
+  async (req, res) => {
+    res.send(req.user)
+  }
 )
 
 router.get('/logout', usersController.logout)

@@ -47,15 +47,15 @@ const InitPassport = () => {
           const user = await UsersModel.findOne({ email: username })
           if (!user) {
             console.log('User doesn´t exists')
-            return done(null, false)
+            done(null, false)
           }
           const isValidPassword = passwordCompare(password, user.password)
           if (!isValidPassword) {
-            return done(null, false)
+            done(null, false)
           }
-          return done(null, user)
+          done(null, user)
         } catch (error) {
-          return done(error)
+          done(error)
         }
       }
     )
