@@ -89,6 +89,7 @@ const InitPassport = () => {
               email: profile._json.email,
               password: '',
             }
+            console.log("usuario creado", user);
             const newUser = await UsersModel.create(user)
             done(null, newUser)
           } else {

@@ -37,8 +37,10 @@ router.post(
 router.get('/logout', usersController.logout)
 
 //Github
-router.get('/github', passport.authenticate({ scope: ['user:email'] }), async (req, res) => {
-})
+router.get(
+  '/github',
+  passport.authenticate(STRATEGY_GITHUB, { scope: ['user:email'] })
+)
 
 router.get(
   '/callbackGithub',
