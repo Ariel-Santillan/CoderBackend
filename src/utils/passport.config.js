@@ -82,11 +82,23 @@ const InitPassport = () => {
           console.log(profile)
           let user = await UsersModel.findOne({ email: profile._json.email })
           if (!user) {
+            if (!profile._json.name) {
+              let firstName = 'Nombre'
+            }
+
+            firstName = profile._json.name
+
+            if (!profile._json.email) {
+              let email = 'mail@mail.com'
+            }
+
+            email = profile._json.email
+
             user = {
-              firstName: profile._json.name,
+              firstName: firstName,
               lastName: '',
               age: 20,
-              email: profile._json.email,
+              email: email,
               password: '',
             }
             const newUser = await UsersModel.create(user)
