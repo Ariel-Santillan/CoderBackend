@@ -6,6 +6,7 @@ const {
   STRATEGY_LOGIN,
   STRATEGY_GITHUB,
 } = require('../utils/constants')
+const passportCustom = require('../utils/passportCall')
 
 const router = Router()
 
@@ -48,6 +49,31 @@ router.get(
   async (req, res) => {
     req.session.user = req.user
     res.redirect('/')
+  }
+)
+
+
+//current
+const authorization = (role) => {
+  //damos autorizacion solo a los que sean el role
+  return (req, res, next) => {
+    if (!req.user)
+      return res
+        .status(401)
+        .send({ status: 'error', msg: 'The header does not contain any user' })
+    if (req.user.role != role)
+      return res.status(403).send({ status: 'error', msg: 'Not authorized' })
+
+    next()
+  }
+}
+
+router.get(
+  '/current',
+  passportCustom('jwt'),
+  authorization('user'),
+  (req, res) => {
+    res.send(req.user)
   }
 )
 module.exports = router
