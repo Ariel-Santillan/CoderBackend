@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+const roles = ['admin', 'superadmin', 'user']
 const usersCollection = 'usersLogin'
 
 const UserSchema = new mongoose.Schema({
@@ -14,6 +15,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -21,6 +23,24 @@ const UserSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
+    required: true,
+    integer: true,
+  },
+  cart: {
+    type: [
+      {
+        cart: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'carts',
+        },
+      },
+    ],
+    default: [],
+  },
+  role: {
+    type: String,
+    default: 'user',
+    enum: roles,
     required: true,
   },
 })

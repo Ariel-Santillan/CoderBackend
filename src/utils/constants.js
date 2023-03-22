@@ -7,6 +7,7 @@ const constants = {
   GITHUB_CLIENTID: 'Iv1.3273330b9baaed34',
   GITHUB_SECRET: 'f661a0a7f5b7b58f156bd5d1a1445793566e7854',
   JWT_PRIVATEKEY: 'SADSADS4A56DSA4DSADSA1245SADSA',
+  COOKIE_USER: 'cookie-user'
 }
 
 module.exports = constants

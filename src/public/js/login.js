@@ -14,7 +14,7 @@ formLogin.addEventListener('submit', (e) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      window.alert(`Bienvenido ${data.firstName}`)
+      window.alert(`Bienvenido ${data.user.firstName}`)
       window.location.href = '/products'
     })
     .catch((err) => {

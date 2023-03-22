@@ -10,10 +10,11 @@ const {
   GITHUB_SECRET,
   STRATEGY_JWT,
   JWT_PRIVATEKEY,
+  COOKIE_USER,
 } = require('./constants')
 const GitHubStrategy = require('passport-github2')
 const jwt = require('passport-jwt')
-const NewUsersModel = require('../dao/models/newUsers.model')
+const { generateToken } = require('./jwt')
 
 //username y password
 const JWTEstrategy = jwt.Strategy
@@ -23,7 +24,7 @@ const cookieExtractor = (req) => {
   let token = null
 
   if (req && req.cookies) {
-    token = req.cookies['token-coder']
+    token = req.cookies[COOKIE_USER]
   }
 
   return token
@@ -41,9 +42,12 @@ const InitPassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          console.log({ jwt_payload })
-          const user = await NewUsersModel.findById(jwt_payload.id)
-          done(null, { user: user, role: jwt_payload.role })
+          console.log('jwt')
+          const { payload } = jwt_payload
+          const user = await UsersModel.findById(payload.id)
+          delete user._doc.password
+          console.log(user)
+          done(null, { user: user._doc })
         } catch (error) {
           done(error)
         }
@@ -62,12 +66,12 @@ const InitPassport = () => {
       async (req, username, password, done) => {
         const { firstName, lastName, age } = req.body
         try {
-          const userExists = await NewUsersModel.findOne({ email: username })
+          const userExists = await UsersModel.findOne({ email: username })
           if (userExists) {
             done(null, false)
           } else {
             const hash = passwordHash(password)
-            const user = await NewUsersModel.create({
+            const user = await UsersModel.create({
               firstName,
               lastName,
               age,
@@ -90,7 +94,7 @@ const InitPassport = () => {
       { usernameField: 'email' },
       async (username, password, done) => {
         try {
-          const user = await NewUsersModel.findOne({ email: username })
+          const user = await UsersModel.findOne({ email: username })
           if (!user) {
             console.log('User doesn´t exists')
             done(null, false)
@@ -99,8 +103,11 @@ const InitPassport = () => {
           if (!isValidPassword) {
             done(null, false)
           }
+          const token = generateToken({ id: user.id, rol: user.role })
+          if(token){
+            done(null, {user: user, token:token})
+          }
           console.log('passport')
-          done(null, user)
         } catch (error) {
           done(error)
         }
@@ -119,7 +126,7 @@ const InitPassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          let user = await NewUsersModel.findOne({ email: profile._json.email })
+          let user = await UsersModel.findOne({ email: profile._json.email })
           if (!user) {
             if (!profile._json.name) {
               let firstName = 'Nombre'
@@ -140,7 +147,7 @@ const InitPassport = () => {
               email: email,
               password: '',
             }
-            const newUser = await NewUsersModel.create(user)
+            const newUser = await UsersModel.create(user)
             done(null, newUser)
           } else {
             done(null, user)
@@ -151,17 +158,6 @@ const InitPassport = () => {
       }
     )
   )
-
-  //Serialize user
-  passport.serializeUser((user, done) => {
-    done(null, user._id)
-  })
-
-  //Deserialize user
-  passport.deserializeUser(async (id, done) => {
-    const user = await NewUsersModel.findById(id)
-    done(null, user)
-  })
 }
 
 module.exports = { InitPassport }

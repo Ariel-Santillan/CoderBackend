@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
+const { JWT_PRIVATEKEY } = require('./constants')
 
 const generateToken = (payload) => {
-  const token = jwt.sign({ payload }, PRIVATE_KEY, { expiresIn: '1h' })
+  const token = jwt.sign({ payload }, JWT_PRIVATEKEY, { expiresIn: '1h' })
   return token
 }
 
@@ -14,7 +15,7 @@ const getPayload = (req, res, next) => {
 
   const token = headerAuth.split(' ')[1]
   if (token) {
-    jwt.verify(token, PRIVATE_KEY, (e, credential) => {
+    jwt.verify(token, JWT_PRIVATEKEY, (e, credential) => {
       console.log(credential)
       if (e) {
         res.status(500).send({ error: 'Unexpected error ', e })
