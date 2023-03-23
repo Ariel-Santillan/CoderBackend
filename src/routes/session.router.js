@@ -32,7 +32,11 @@ router.get('/logout', usersController.logout)
 //Github
 router.get(
   '/github',
-  passport.authenticate(STRATEGY_GITHUB, { scope: ['user:email'] })
+  passport.authenticate(
+    STRATEGY_GITHUB,
+    { scope: ['user.email'], session: false },
+    async () => {}
+  )
 )
 
 router.get(
@@ -44,28 +48,9 @@ router.get(
   }
 )
 
-// //current
-// const authorization = (role) => {
-//   //damos autorizacion solo a los que sean el role
-//   return (req, res, next) => {
-//     if (!req.user)
-//       return res
-//         .status(401)
-//         .send({ status: 'error', msg: 'The header does not contain any user' })
-//     if (req.user.role != role)
-//       return res.status(403).send({ status: 'error', msg: 'Not authorized' })
-
-//     next()
-//   }
-// }
-
 router.get(
   '/current',
   passportCustom(STRATEGY_JWT),
   sessionController.getCurrent
-  // authorization('user'),
-  // (req, res) => {
-  //   res.send(req.user)
-  // }
 )
 module.exports = router

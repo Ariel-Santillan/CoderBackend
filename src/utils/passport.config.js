@@ -31,8 +31,8 @@ const cookieExtractor = (req) => {
 }
 
 const InitPassport = () => {
-  //Nuevo
 
+  //JWT
   passport.use(
     STRATEGY_JWT,
     new JWTEstrategy(
