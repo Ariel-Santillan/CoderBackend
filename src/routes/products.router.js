@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const productsController = require('../controllers/products.controller')
-const multerUtils = require('../utils/multer.utils')
+const multerUtils = require('../config/multer.utils')
 
 const router = Router()
 

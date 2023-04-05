@@ -1,9 +1,9 @@
-const ChatsManagerMongo = require('../dao/MongoManager/chatsManagerMongo')
-const { edmitAddMessage } = require('../utils/socket.io')
+const chatsService = require('../services/chat.service')
+const { edmitAddMessage } = require('../config/socket.io')
 
 const getAllMessages = async (req, res) => {
   try {
-    const messages = await ChatsManagerMongo.getMessages()
+    const messages = await chatsService.getAllMessages()
     return res.json({
       msg: 'OK',
       payload: messages,
@@ -19,7 +19,7 @@ const getAllMessages = async (req, res) => {
 const addNewMessage = async (req, res) => {
   try {
     const newMessage = req.body
-    const messageAdded = await ChatsManagerMongo.addMessage(newMessage)
+    const messageAdded = await chatsService.addNewMessage(newMessage)
     edmitAddMessage(messageAdded)
     return res.json({
       msg: 'OK',

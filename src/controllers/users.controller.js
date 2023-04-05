@@ -1,9 +1,10 @@
-const UsersManagerMongo = require('../dao/MongoManager/usersManagerMongo')
+const { ADMIN_NAME, ADMIN_PASSWORD } = require('../config/config')
+const userService = require('../services/user.service')
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
-    if(email === 'adminCoder@coder.com' && password === 'adminCod3r123'){
+    if(email === ADMIN_NAME && password === ADMIN_PASSWORD){
       req.session.admin = true
       let user = {
         firstName: 'Coder',
@@ -14,7 +15,7 @@ const login = async (req, res) => {
       req.session.user = user
       res.send(user)
     } else{
-      user = await UsersManagerMongo.login(email, password)
+      user = await userService.login(email, password)
       if (user) {
         req.session.user = user
         res.send({
@@ -36,7 +37,7 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   try {
     const user = req.body
-    const userCreated = await UsersManagerMongo.register(user)
+    const userCreated = await userService.register(user)
     res.send(userCreated)
   } catch (error) {
     res.status(500).json({

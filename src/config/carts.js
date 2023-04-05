@@ -1,4 +1,4 @@
-const ProductManagerMongo = require("../dao/MongoManager/productManagerMongo")
+const productsService = require("../services/products.service")
 
 const calculateCartTotal = (products) => {
   return products.reduce((acc, curr) => acc + curr.unitValue * curr.quantity, 0)
@@ -14,7 +14,7 @@ const mapProductCart = async (products) => {
     )
 
     if (productIndex === -1) {
-      const productDb = await ProductManagerMongo.getById(productID)
+      const productDb = await productsService.findById(productID)
 
       if (productDb) {
         productCartList.push({

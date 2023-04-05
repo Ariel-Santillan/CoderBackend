@@ -1,4 +1,4 @@
-const { COOKIE_USER } = require('../utils/constants')
+const { COOKIE_USER } = require('../config/constants')
 
 const login = async (req, res) => {
   req.session.user = {

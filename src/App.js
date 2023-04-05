@@ -4,17 +4,16 @@ const productRouter = require('./routes/products.router')
 const viewsRouter = require('./routes/views.router')
 const chatsRouter = require('./routes/chats.router')
 const handlebars = require('express-handlebars')
-const { connectSocket } = require('./utils/socket.io')
+const { connectSocket } = require('./config/socket.io')
 const mongoose = require('mongoose')
-const PORT = 8080
 const server = express()
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const connectMongo = require('connect-mongo')
 const sessionRouter = require('./routes/session.router')
-const { InitPassport } = require('./utils/passport.config')
+const { InitPassport } = require('./config/passport.config')
 const passport = require('passport')
-const { initialize } = require('passport')
+const { MONGO_URL, PORT } = require('./config/config')
 
 //Express
 server.use(express.json())
@@ -33,8 +32,7 @@ server.use(cookieParser())
 server.use(
   session({
     store: connectMongo.create({
-      mongoUrl:
-        'mongodb+srv://CoderUser:CoderPass@codercluster.5ssvndd.mongodb.net/?retryWrites=true&w=majority',
+      mongoUrl: MONGO_URL,
       mongoOptions: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -69,15 +67,11 @@ connectSocket(httpServer)
 
 //Mongoose
 mongoose.set('strictQuery', false)
-mongoose.connect(
-  'mongodb+srv://CoderUser:CoderPass@codercluster.5ssvndd.mongodb.net/?retryWrites=true&w=majority',
-  // { useNewUrlParser: true, saveUninitialized: true },
-  (error) => {
-    if (error) {
-      console.log('Error de conexión. ', error)
-      process.exit()
-    } else {
-      console.log('Conexión con la base de datos exitosa')
-    }
+mongoose.connect(MONGO_URL, (error) => {
+  if (error) {
+    console.log('Error de conexión. ', error)
+    process.exit()
+  } else {
+    console.log('Conexión con la base de datos exitosa')
   }
-)
+})

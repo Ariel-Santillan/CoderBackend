@@ -1,6 +1,6 @@
-const ProductsModel = require('../dao/models/products.model')
-const CartsManagerMongo = require('../dao/MongoManager/cartsManagerMongo')
-const { mapProductCart, calculateCartTotal } = require('../utils/carts')
+const cartsService = require('../services/carts.service')
+const productsService = require('../services/products.service')
+const { mapProductCart, calculateCartTotal } = require('../config/carts')
 
 const create = async (req, res) => {
   try {
@@ -13,7 +13,7 @@ const create = async (req, res) => {
       products: productCartList,
     }
 
-    await CartsManagerMongo.create(productCartList)
+    await cartsService.create(productCartList)
 
     return res.json({
       status: 'Success',
@@ -30,7 +30,7 @@ const create = async (req, res) => {
 const getByID = async (req, res) => {
   try {
     const cid = req.params.cid
-    const cartFound = await CartsManagerMongo.getByID(cid)
+    const cartFound = await cartsService.getByID(cid)
     return res.json({
       status: 'Success',
       payload: cartFound,
@@ -42,65 +42,6 @@ const getByID = async (req, res) => {
     })
   }
 }
-
-// const addProduct = async (req, res) => {
-//   try {
-//     const { cid, pid } = req.params
-//     const cart = await CartsManagerMongo.getByID(cid)
-
-//     if (!cart) {
-//       return res.status(400).json({
-//         status: 'Error',
-//         payload: `El carrito ${cid} no existe`,
-//       })
-//     }
-
-//     const productExistsonDB = ProductsModel.findById(pid)
-
-//     if (productExistsonDB) {
-//       return res.status(400).json({
-//         status: 'Error',
-//         payload: `El producto ${pid} no existe en la base de datos`,
-//       })
-//     }
-
-//     const productExistsInCart = cart.products.some(
-//       (product) => product._id === pid
-//     )
-
-//     if (!productExistsInCart) {
-//       return res.status(400).json({
-//         status: 'Error',
-//         payload: `El product ${pid} no existe en el carrito ${cid}`,
-//       })
-//     }
-
-//     const product = cart.products.find((product) => {
-//       return product?._id === pid
-//     })
-
-//     if (product) {
-//       product.quantity++
-//     } else {
-//       cart.products.push({
-//         product: pid,
-//         quantity: 1,
-//       })
-//     }
-
-//     const payload = await CartsManagerMongo.updateProductInCartID(cid, cart)
-
-//     res.json({
-//       msg: 'Success',
-//       payload: payload,
-//     })
-//   } catch (error) {
-//     return res.status(500).json({
-//       status: 'Error',
-//       payload: error.message,
-//     })
-//   }
-// }
 
 const deleteProduct = async (req, res) => {
   try {
@@ -125,7 +66,7 @@ const deleteProduct = async (req, res) => {
     cart.totalQuantity = cart.products.length
     cart.totalPrice = calculateCartTotal(cart.products)
 
-    await CartsManagerMongo.updateCart(cid, cart)
+    await cartsService.updateByID(cid, cart)
 
     res.json({
       status: 'Success',
@@ -155,7 +96,7 @@ const updateAllProducts = async (req, res) => {
       totalPrice: calculateCartTotal(productCartList),
     }
 
-    await CartsManagerMongo.updateCart(cid, cartUpdated)
+    await cartsService.updateByID(cid, cartUpdated)
 
     res.json({
       status: 'Success',
@@ -191,9 +132,9 @@ const updateProductQuantity = async (req, res) => {
 
     cart.products[indexProduct].quantity += quantity
 
-    cart = setCart(cart) //Probar si anda este let o si no se puede hacer
+    cart = setCart(cart)
 
-    await CartsManagerMongo.updateCart(cid, cart)
+    await cartsService.updateByID(cid, cart)
 
     res.json({
       status: 'Success',
@@ -208,7 +149,7 @@ const updateProductQuantity = async (req, res) => {
 }
 
 const validateCart = async (cid) => {
-  const cart = await CartsManagerMongo.getByID(cid)
+  const cart = await cartsService.getByID(cid)
 
   if (!cart) {
     return res.status(400).json({
@@ -221,7 +162,7 @@ const validateCart = async (cid) => {
 }
 
 const validateProductOnDB = async (pid) => {
-  const productExistsonDB = ProductsModel.findById(pid)
+  const productExistsonDB = await productsService.findById(pid)
 
   if (productExistsonDB) {
     return res.status(400).json({
@@ -229,8 +170,6 @@ const validateProductOnDB = async (pid) => {
       payload: `El producto ${pid} no existe en la base de datos`,
     })
   }
-
-  // return productExistsonDB
 }
 
 const setCart = async (cart) => {

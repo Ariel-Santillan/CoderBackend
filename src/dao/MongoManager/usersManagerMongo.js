@@ -1,4 +1,4 @@
-const { passwordHash, passwordCompare } = require('../../utils/bcrypt')
+const { passwordHash, passwordCompare } = require('../../config/bcrypt')
 const UsersModel = require('../models/users.model')
 
 class UsersManagerMongo {

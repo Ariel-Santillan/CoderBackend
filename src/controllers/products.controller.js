@@ -1,15 +1,15 @@
-const ProductManagerMongo = require('../dao/MongoManager/productManagerMongo')
+const productsService = require('../services/products.service')
 const {
   emitDeleteProduct,
   emitAddProduct,
   emitUpdateProduct,
-} = require('../utils/socket.io')
+} = require('../config/socket.io')
 // const { body, validationResult } = require('express-validator')
 
 const getProducts = async (req, res) => {
   try {
     const { page, limit, sort, ...query } = req.query
-    const products = await ProductManagerMongo.getProducts(page, limit, sort, query)
+    const products = await productsService.getAll()
     return res.json({
       status: 'Sucess',
       payload: products,
@@ -25,7 +25,7 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   try {
     const pid = req.params.pid
-    const productFound = await ProductManagerMongo.getProductById(pid)
+    const productFound = await productsService.getProductById(pid)
     return res.json({
       status: 'Success',
       payload: productFound,
@@ -41,14 +41,13 @@ const getProductById = async (req, res) => {
 const addProduct = async (req, res) => {
   try {
     const product = req.body
-    const productAdded = await ProductManagerMongo.addProduct(product)
+    const productAdded = await productsService.add(product)
     emitAddProduct(productAdded)
 
     return res.json({
       status: 'Success',
       payload: productAdded,
     })
-    // }
   } catch (error) {
     return res.status(500).json({
       status: 'Error',
@@ -61,7 +60,7 @@ const updateProduct = async (req, res) => {
   try {
     const pid = req.params.pid
     const product = req.body
-    await productMangerMongo.updateProduct(pid, product)
+    await productsService.updateByID(pid, product)
     emitUpdateProduct(product)
     return res.json({
       status: 'Success',
@@ -78,7 +77,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid
-    const deleted = await productMangerMongo.deleteProduct(pid)
+    const deleted = await productsService.deleteByID(pid)
     emitDeleteProduct(pid)
     if (deleted) {
       return res.json({
