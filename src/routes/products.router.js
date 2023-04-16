@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const productsController = require('../controllers/products.controller')
 const multerUtils = require('../config/multer.utils')
+const { mdwOnlyAdmin } = require('../config/mdws')
 
 const router = Router()
 
@@ -15,18 +16,24 @@ router.get('/:pid', productsController.getProductById)
 
 //Add product
 
-router.post('/', multerUtils.single('file'), productsController.addProduct)
+router.post(
+  '/',
+  multerUtils.single('file'),
+  mdwOnlyAdmin,
+  productsController.addProduct
+)
 
 //Update product
 
 router.put(
   '/:pid',
   multerUtils.single('file'),
+  mdwOnlyAdmin,
   productsController.updateProduct
 )
 
 //Delete product by ID
 
-router.delete('/:pid', productsController.deleteProduct)
+router.delete('/:pid', mdwOnlyAdmin, productsController.deleteProduct)
 
 module.exports = router

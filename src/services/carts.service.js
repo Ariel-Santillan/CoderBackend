@@ -1,9 +1,19 @@
-const cartsManagerMongo = require('../dao/MongoManager/cartsManagerMongo')
+class CartService {
+  constructor(dao) {
+    this.dao = dao
+  }
 
-const create = async (productCartList) => await cartsManagerMongo.create(productCartList)
+  get = () => this.dao.get()
+  
+  getById = (id) => this.dao.getById(id)
+  
+  insert = (cart) => this.dao.insert(cart)
+  
+  updateById = (cart, id) => this.dao.updateById(id, cart)
+  
+  deleteByID = (id) => this.dao.deleteByID(id)
+}
 
-const createByID = async (id) => await cartsManagerMongo.getByID(id)
 
-const updateByID = async (id, cart) => cartsManagerMongo.updateCart(id, cart)
 
-module.exports = { create, createByID, updateByID }
+module.exports = CartService

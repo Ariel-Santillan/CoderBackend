@@ -1,12 +1,13 @@
 const { Router } = require('express')
 const cartsController = require('../controllers/carts.controller')
+const { mdwUserSession } = require('../config/mdws')
 
 const router = Router()
 
 // Mongoose
 
 // Create cart
-router.post('/', cartsController.create)
+router.post('/', mdwUserSession, cartsController.create)
 
 //Cart By ID
 router.get('/:cid', cartsController.getByID)
@@ -23,5 +24,7 @@ router.put('/:cid', cartsController.updateAllProducts)
 //Update Product quantity on Cart ID
 router.put('/:cid/product/:pid', cartsController.updateProductQuantity)
 
+//Complete purchase
+router.get('/:cid/purchase', cartsController.purchaseCart)
 
 module.exports = router

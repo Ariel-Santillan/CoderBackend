@@ -1,15 +1,17 @@
-const productManagerMongo = require('../dao/MongoManager/productManagerMongo')
-const ProductsModel = require('../dao/models/products.model')
+class ProductService {
+  constructor(dao) {
+    this.dao = dao
+  }
 
-const findById = async (id) => await ProductsModel.findById(id)
+  get = () => this.dao.get()
 
-const getAll = async (page, limit, sort, query) =>
-  await productManagerMongo.getProducts(page, limit, sort, query)
+  getById = (id) => this.dao.getById(id)
 
-const add = async (product) => await productManagerMongo.addProduct(product)
+  insert = (product) => this.dao.insert(product)
 
-const updateByID = async (pid, product) => await productManagerMongo.updateProduct(pid, product)
+  updateById = (product, id) => this.dao.updateById(id, product)
 
-const deleteByID = async (id) => await productManagerMongo.deleteProduct(id)
+  deleteByID = (id) => this.dao.deleteByID(id)
+}
 
-module.exports = { findById, getAll, add, updateByID, deleteByID }
+module.exports = ProductService

@@ -1,4 +1,5 @@
 const { ADMIN_NAME, ADMIN_PASSWORD } = require('../config/config')
+const UserDTO = require('../dao/DTOs/user.dto')
 const userService = require('../services/user.service')
 
 const login = async (req, res) => {
@@ -37,7 +38,8 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   try {
     const user = req.body
-    const userCreated = await userService.register(user)
+    const userDTO = new UserDTO(user)
+    const userCreated = await userService.register(userDTO)
     res.send(userCreated)
   } catch (error) {
     res.status(500).json({

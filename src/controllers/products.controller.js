@@ -1,4 +1,4 @@
-const productsService = require('../services/products.service')
+const { productService } = require('../services')
 const {
   emitDeleteProduct,
   emitAddProduct,
@@ -9,9 +9,9 @@ const {
 const getProducts = async (req, res) => {
   try {
     const { page, limit, sort, ...query } = req.query
-    const products = await productsService.getAll()
+    const products = await productService.get()
     return res.json({
-      status: 'Sucess',
+      status: 'Success',
       payload: products,
     })
   } catch (error) {
@@ -25,7 +25,7 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   try {
     const pid = req.params.pid
-    const productFound = await productsService.getProductById(pid)
+    const productFound = await productService.getById(pid)
     return res.json({
       status: 'Success',
       payload: productFound,
@@ -41,7 +41,7 @@ const getProductById = async (req, res) => {
 const addProduct = async (req, res) => {
   try {
     const product = req.body
-    const productAdded = await productsService.add(product)
+    const productAdded = await productService.insert(product)
     emitAddProduct(productAdded)
 
     return res.json({
@@ -60,7 +60,7 @@ const updateProduct = async (req, res) => {
   try {
     const pid = req.params.pid
     const product = req.body
-    await productsService.updateByID(pid, product)
+    await productService.updateById(product, pid)
     emitUpdateProduct(product)
     return res.json({
       status: 'Success',
@@ -77,16 +77,16 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid
-    const deleted = await productsService.deleteByID(pid)
+    const deleted = await productService.deleteByID(pid)
     emitDeleteProduct(pid)
     if (deleted) {
       return res.json({
-      status: 'Success',
+        status: 'Success',
         payload: 'Product sucessfully deleted',
       })
     } else {
       return res.status(404).json({
-      status: 'Error',
+        status: 'Error',
         payload: `ID ${pid} was not found on the products collection`,
       })
     }

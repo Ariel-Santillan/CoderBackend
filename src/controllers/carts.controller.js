@@ -1,5 +1,4 @@
-const cartsService = require('../services/carts.service')
-const productsService = require('../services/products.service')
+const { productService, cartService } = require('../services')
 const { mapProductCart, calculateCartTotal } = require('../config/carts')
 
 const create = async (req, res) => {
@@ -13,7 +12,7 @@ const create = async (req, res) => {
       products: productCartList,
     }
 
-    await cartsService.create(productCartList)
+    await cartService.insert(productCartList)
 
     return res.json({
       status: 'Success',
@@ -30,7 +29,7 @@ const create = async (req, res) => {
 const getByID = async (req, res) => {
   try {
     const cid = req.params.cid
-    const cartFound = await cartsService.getByID(cid)
+    const cartFound = await cartService.getById(cid)
     return res.json({
       status: 'Success',
       payload: cartFound,
@@ -66,7 +65,7 @@ const deleteProduct = async (req, res) => {
     cart.totalQuantity = cart.products.length
     cart.totalPrice = calculateCartTotal(cart.products)
 
-    await cartsService.updateByID(cid, cart)
+    await cartService.updateById(cid, cart)
 
     res.json({
       status: 'Success',
@@ -96,7 +95,7 @@ const updateAllProducts = async (req, res) => {
       totalPrice: calculateCartTotal(productCartList),
     }
 
-    await cartsService.updateByID(cid, cartUpdated)
+    await cartService.updateById(cid, cartUpdated)
 
     res.json({
       status: 'Success',
@@ -134,7 +133,7 @@ const updateProductQuantity = async (req, res) => {
 
     cart = setCart(cart)
 
-    await cartsService.updateByID(cid, cart)
+    await cartService.updateById(cid, cart)
 
     res.json({
       status: 'Success',
@@ -149,7 +148,7 @@ const updateProductQuantity = async (req, res) => {
 }
 
 const validateCart = async (cid) => {
-  const cart = await cartsService.getByID(cid)
+  const cart = await cartService.getById(cid)
 
   if (!cart) {
     return res.status(400).json({
@@ -162,7 +161,7 @@ const validateCart = async (cid) => {
 }
 
 const validateProductOnDB = async (pid) => {
-  const productExistsonDB = await productsService.findById(pid)
+  const productExistsonDB = await productService.getById(pid)
 
   if (productExistsonDB) {
     return res.status(400).json({
@@ -179,6 +178,37 @@ const setCart = async (cart) => {
 
   return cart
 }
+
+const purchaseCart = async (req, res) => {
+  try {
+    const cid = req.params.cid
+    const cartFound = await cartService.getById(cid)
+    let productFound={};
+    const productsPurchased = []
+    const productsNotPurchased = []
+    cartFound.products.forEach(async (product) =>
+    productFound = await productService.getById(product.product._id.toString())
+    // if(productFound.stock >= product.quantity){
+    //   productFound.stock = productFound.stock - product.quantity
+    //   productsPurchased.push(product)
+    // } else {
+    //   productsNotPurchased.push(product)
+    // }
+    )
+
+    console.log("comprados", productsPurchased);
+    console.log("no comprados", productsNotPurchased);
+
+    res.json({
+      msg:'buen pedido rey'
+    })
+  } catch (error) {
+    res.json({
+      msg: error.message
+    })
+    
+  }
+}
 module.exports = {
   create,
   getByID,
@@ -186,4 +216,5 @@ module.exports = {
   deleteProduct,
   updateAllProducts,
   updateProductQuantity,
+  purchaseCart,
 }

@@ -107,7 +107,6 @@ const InitPassport = () => {
           if(token){
             done(null, {user: user, token:token})
           }
-          console.log('passport')
         } catch (error) {
           done(error)
         }
