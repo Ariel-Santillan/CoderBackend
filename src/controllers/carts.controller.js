@@ -179,34 +179,48 @@ const setCart = async (cart) => {
   return cart
 }
 
+const validateStockOfProducts = (products) => {
+  console.log(products)
+  
+  const productsPurchased = []
+  const productsNotPurchased = []
+
+  products.forEach((product) => {
+    if (productFound.stock >= product.quantity) {
+      productFound.stock = productFound.stock - product.quantity
+      productsPurchased.push(product)
+    } else {
+      productsNotPurchased.push(product)
+    }
+  })
+
+  console.log('comprados', productsPurchased)
+  console.log('no comprados', productsNotPurchased)
+}
+
 const purchaseCart = async (req, res) => {
   try {
     const cid = req.params.cid
     const cartFound = await cartService.getById(cid)
-    let productFound={};
-    const productsPurchased = []
-    const productsNotPurchased = []
-    cartFound.products.forEach(async (product) =>
-    productFound = await productService.getById(product.product._id.toString())
-    // if(productFound.stock >= product.quantity){
-    //   productFound.stock = productFound.stock - product.quantity
-    //   productsPurchased.push(product)
-    // } else {
-    //   productsNotPurchased.push(product)
-    // }
-    )
+    let productFound = {}
+    const products = []
 
-    console.log("comprados", productsPurchased);
-    console.log("no comprados", productsNotPurchased);
+    cartFound.products.forEach(async (product) => {
+      productFound = await productService.getById(
+        product.product._id.toString()
+      )
+      products.push(product)
+    })
+
+    validateStockOfProducts(products)
 
     res.json({
-      msg:'buen pedido rey'
+      msg: 'buen pedido rey',
     })
   } catch (error) {
     res.json({
-      msg: error.message
+      msg: error.message,
     })
-    
   }
 }
 module.exports = {
