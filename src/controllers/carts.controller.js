@@ -179,6 +179,22 @@ const setCart = async (cart) => {
   return cart
 }
 
+async function fetchData() {
+  const url = [
+    productService.getById
+  ]
+
+  const promises = url.map(url => fetch(url))
+  
+  const responses = await Promise.all(promises)
+
+  const data = await Promise.all(responses.map(response => response.json()))
+
+  return data
+}
+
+
+
 const validateStockOfProducts = (products) => {
   console.log(products)
   
@@ -204,15 +220,14 @@ const purchaseCart = async (req, res) => {
     const cartFound = await cartService.getById(cid)
     let productFound = {}
     const products = []
+    const productsPromises = []
+    const data = fetchData().then(data => console.log(data))
 
-    cartFound.products.forEach(async (product) => {
-      productFound = await productService.getById(
-        product.product._id.toString()
-      )
-      products.push(product)
-    })
+    data.forEach( (product) => productsPromises.push(product))
 
-    validateStockOfProducts(products)
+    console.log("data", productsPromises);
+
+    // validateStockOfProducts(products)
 
     res.json({
       msg: 'buen pedido rey',
