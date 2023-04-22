@@ -219,13 +219,33 @@ const purchaseCart = async (req, res) => {
     const cid = req.params.cid
     const cartFound = await cartService.getById(cid)
     let productFound = {}
-    const products = []
-    const productsPromises = []
-    const data = fetchData().then(data => console.log(data))
 
-    data.forEach( (product) => productsPromises.push(product))
+    const productsPurchased = []
+    const productsNotPurchased = []
 
-    console.log("data", productsPromises);
+  
+    cartFound.products.forEach(async product =>{
+      const productFound = productService.getById(product.id)
+      console.log(productFound.stock);
+      if(productFound.stock >= product.quantity){
+        productsPurchased.push(product)
+      } else {
+        productsNotPurchased.push(product)
+      }
+    })
+
+    console.log("comprados", productsPurchased);
+    console.log("no comprados", productsNotPurchased);
+
+
+
+    // const products = []
+    // const productsPromises = []
+    // const data = fetchData().then(data => console.log(data))
+
+    // data.forEach( (product) => productsPromises.push(product))
+
+    // console.log("data", productsPromises);
 
     // validateStockOfProducts(products)
 
