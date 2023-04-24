@@ -14,6 +14,7 @@ const sessionRouter = require('./routes/session.router')
 const { InitPassport } = require('./config/passport.config')
 const passport = require('passport')
 const { MONGO_URL, PORT } = require('./config/config')
+const { mdwError } = require('./utils/errorHandler')
 
 //Express
 server.use(express.json())
@@ -55,8 +56,9 @@ server.use('/api/products', productRouter)
 server.use('/api/carts', cartsRouter)
 server.use('/api/chats', chatsRouter)
 server.use('/', viewsRouter)
-// server.use('/api/sessions', viewsRouter)
+server.use('/api/sessions', viewsRouter)
 server.use('/api/sessions', sessionRouter)
+server.use(mdwError)
 
 //Socket io
 const httpServer = server.listen(PORT, () => {

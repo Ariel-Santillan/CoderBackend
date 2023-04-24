@@ -4,6 +4,13 @@ const {
   emitAddProduct,
   emitUpdateProduct,
 } = require('../config/socket.io')
+const CustomError = require('../utils/customError')
+const {
+  GET_PRODUCT,
+  CREATE_PRODUCT,
+  UPDATE_PRODUCT,
+  DELETE_PRODUCT,
+} = require('../utils/EErrors')
 // const { body, validationResult } = require('express-validator')
 
 const getProducts = async (req, res) => {
@@ -15,10 +22,7 @@ const getProducts = async (req, res) => {
       payload: products,
     })
   } catch (error) {
-    return res.status(500).json({
-      status: 'Error',
-      payload: 'Error al intentar obtener los productos',
-    })
+    CustomError.createError(500, error.message, GET_PRODUCT)
   }
 }
 
@@ -31,10 +35,7 @@ const getProductById = async (req, res) => {
       payload: productFound,
     })
   } catch (error) {
-    return res.status(500).json({
-      status: 'Error',
-      payload: error.message,
-    })
+    CustomError.createError(500, error.message, GET_PRODUCT)
   }
 }
 
@@ -49,10 +50,7 @@ const addProduct = async (req, res) => {
       payload: productAdded,
     })
   } catch (error) {
-    return res.status(500).json({
-      status: 'Error',
-      payload: error.message,
-    })
+    CustomError.createError(500, error.message, CREATE_PRODUCT)
   }
 }
 
@@ -67,10 +65,7 @@ const updateProduct = async (req, res) => {
       payload: `Product updated successfully`,
     })
   } catch (error) {
-    return res.status(500).json({
-      status: 'Error',
-      payload: error.message,
-    })
+    CustomError.createError(500, error.message, UPDATE_PRODUCT)
   }
 }
 
@@ -91,10 +86,7 @@ const deleteProduct = async (req, res) => {
       })
     }
   } catch (error) {
-    return res.status(500).json({
-      status: 'Error',
-      payload: error.message,
-    })
+    CustomError.createError(500, error.message, DELETE_PRODUCT)
   }
 }
 

@@ -1,4 +1,4 @@
-const { COOKIE_USER } = require('../config/constants')
+const { COOKIE_USER } = require("../utils/constants")
 
 const login = async (req, res) => {
   req.session.user = {
@@ -8,7 +8,7 @@ const login = async (req, res) => {
           email: req.user.email,
         }
   res
-    .cookie(COOKIE_USER, req.user.token, { maxAge: 300000, httpOnly: true })
+    .cookie(COOKIE_USERE_USER, req.user.token, { maxAge: 300000, httpOnly: true })
     .send(req.user)
 }
 

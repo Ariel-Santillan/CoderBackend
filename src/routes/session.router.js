@@ -6,7 +6,7 @@ const {
   STRATEGY_LOGIN,
   STRATEGY_GITHUB,
   STRATEGY_JWT,
-} = require('../config/constants')
+} = require('../utils/constants')
 const passportCustom = require('../config/passportCall')
 const sessionController = require('../controllers/session.controller')
 

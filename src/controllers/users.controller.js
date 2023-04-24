@@ -1,11 +1,12 @@
 const { ADMIN_NAME, ADMIN_PASSWORD } = require('../config/config')
 const UserDTO = require('../dao/DTOs/user.dto')
 const userService = require('../services/user.service')
+const { CREATE_USER, GET_USER } = require('../utils/EErrors')
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
-    if(email === ADMIN_NAME && password === ADMIN_PASSWORD){
+    if (email === ADMIN_NAME && password === ADMIN_PASSWORD) {
       req.session.admin = true
       let user = {
         firstName: 'Coder',
@@ -15,7 +16,7 @@ const login = async (req, res) => {
       }
       req.session.user = user
       res.send(user)
-    } else{
+    } else {
       user = await userService.login(email, password)
       if (user) {
         req.session.user = user
@@ -28,10 +29,7 @@ const login = async (req, res) => {
       }
     }
   } catch (error) {
-    return res.status(401).json({
-      status: 'Error',
-      payload: 'Email o contraseña incorrectos',
-    })
+    CustomError.createError(500, error.message, GET_USER)
   }
 }
 
@@ -42,25 +40,21 @@ const register = async (req, res) => {
     const userCreated = await userService.register(userDTO)
     res.send(userCreated)
   } catch (error) {
-    res.status(500).json({
-      status: 'Error',
-      payload: 'Error al crear usuario',
-    })
+    CustomError.createError(500, error.message, CREATE_USER)
   }
 }
 
 const logout = async (req, res) => {
-try {
-  req.session.destroy(err => {
-    if(!err) res.send('Logout exitoso')
-    else res.status(500).json({
-      status: 'Error',
-      payload: 'Error al desloguearse',
+  try {
+    req.session.destroy((err) => {
+      if (!err) res.send('Logout exitoso')
+      else
+        res.status(500).json({
+          status: 'Error',
+          payload: 'Error al desloguearse',
+        })
     })
-  })
-} catch (error) {
-  
-}
+  } catch (error) {}
 }
 
-module.exports = { login , register, logout}
+module.exports = { login, register, logout }
