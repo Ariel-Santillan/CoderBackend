@@ -3,6 +3,7 @@ const { PERSISTANCE: PERSISTENCE, MONGO_URL } = require('../config/config')
 
 let productsDao = {};
 let cartsDao = {};
+let ticketsDao = {};
 (async () => {
   switch (PERSISTENCE) {
     case 'MONGO':
@@ -10,8 +11,10 @@ let cartsDao = {};
       mongoose.connect(MONGO_URL)
       const productsMongoPersistance = await require('./products.dao')
       const cartsMongoPersistance = await require('./carts.dao')
+      const ticketsMongoPersistance = await require('./tickets.dao')
       productsDao.get = productsMongoPersistance.get
       productsDao.getById = productsMongoPersistance.getById
+      productsDao.getAllProductsByIDs = productsMongoPersistance.getAllProductsByIDs
       productsDao.insert = productsMongoPersistance.insert
       productsDao.update = productsMongoPersistance.updateById
       productsDao.delete = productsMongoPersistance.deleteById
@@ -20,6 +23,7 @@ let cartsDao = {};
       cartsDao.insert = cartsMongoPersistance.insert
       cartsDao.updateById = cartsMongoPersistance.updateById
       cartsDao.deleteById = cartsMongoPersistance.deleteById
+      ticketsDao.insert = ticketsMongoPersistance.insert
       break
     case 'MEMORY':
       const productsMemory = await require('./productsMemory.dao')
@@ -41,4 +45,4 @@ let cartsDao = {};
   }
 })()
 
-module.exports = { productsDao, cartsDao }
+module.exports = { productsDao, cartsDao, ticketsDao }

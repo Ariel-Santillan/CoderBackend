@@ -10,6 +10,8 @@ class ProductsDaoMongo {
   updateById = (product, id) => ProductsModel.findByIdAndUpdate(id, product)
 
   deleteById = (id) => ProductsModel.deleteById(id)
+
+  getAllProductsByIDs = (ids) => ProductsModel.find({ _id: { $in: ids } })
 }
 
 module.exports = new ProductsDaoMongo()

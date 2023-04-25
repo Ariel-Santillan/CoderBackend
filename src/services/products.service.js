@@ -12,6 +12,8 @@ class ProductService {
   updateById = (product, id) => this.dao.updateById(id, product)
 
   deleteByID = (id) => this.dao.deleteByID(id)
+
+  getAllProductsByIDs = (ids) => this.dao.getAllProductsByIDs(ids)
 }
 
 module.exports = ProductService

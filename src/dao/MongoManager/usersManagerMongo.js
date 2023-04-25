@@ -16,6 +16,10 @@ class UsersManagerMongo {
     const hash = passwordHash(user.password)
     return await UsersModel.create({ ...user, password: hash })
   }
+
+  getByID = async (id) => {
+    return await UsersModel.findById(id)
+  }
 }
 
 module.exports = new UsersManagerMongo()

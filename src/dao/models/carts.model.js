@@ -11,6 +11,7 @@ const cartsSchema = new mongoose.Schema({
           ref: 'products',
         },
         quantity: Number,
+        unitValue: Number,
       },
     ],
     default: [],
@@ -22,6 +23,16 @@ const cartsSchema = new mongoose.Schema({
   totalQuantity: {
     type: Number,
     default: 0,
+  },
+  users: {
+    type: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'users',
+        },
+      },
+    ],
   },
 })
 

@@ -7,7 +7,7 @@ const router = Router()
 // Mongoose
 
 // Create cart
-router.post('/', mdwUserSession, cartsController.create)
+router.post('/', cartsController.create)
 
 //Cart By ID
 router.get('/:cid', cartsController.getByID)

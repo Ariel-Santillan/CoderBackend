@@ -4,4 +4,6 @@ const login = async (email, password) => usersManagerMongo.login(email, password
 
 const register = async (user) => usersManagerMongo.register(user)
 
-module.exports = {login, register}
+const getByID = async (id) => usersManagerMongo.getByID(id)
+
+module.exports = {login, register, getByID}
