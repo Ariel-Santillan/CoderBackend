@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const { JWT_PRIVATEKEY } = require('./constants')
 
 const generateToken = (payload) => {
   const token = jwt.sign({ payload }, JWT_PRIVATEKEY, { expiresIn: '1h' })

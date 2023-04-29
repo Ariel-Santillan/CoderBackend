@@ -2,19 +2,18 @@ const passport = require('passport')
 const local = require('passport-local')
 const UsersModel = require('../dao/models/users.model')
 const { passwordHash, passwordCompare } = require('./bcrypt')
-const {
-  STRATEGY_REGISTER,
+
+const GitHubStrategy = require('passport-github2')
+const jwt = require('passport-jwt')
+const { generateToken } = require('./jwt')
+const {  STRATEGY_REGISTER,
   STRATEGY_LOGIN,
   STRATEGY_GITHUB,
   GITHUB_CLIENTID,
   GITHUB_SECRET,
   STRATEGY_JWT,
   JWT_PRIVATEKEY,
-  COOKIE_USER,
-} = require('./constants')
-const GitHubStrategy = require('passport-github2')
-const jwt = require('passport-jwt')
-const { generateToken } = require('./jwt')
+  COOKIE_USER, } = require('../utils/constants')
 
 //username y password
 const JWTEstrategy = jwt.Strategy

@@ -1,14 +1,13 @@
 const { Router } = require('express')
 const usersController = require('../controllers/users.controller')
 const passport = require('passport')
-const {
-  STRATEGY_REGISTER,
-  STRATEGY_LOGIN,
-  STRATEGY_GITHUB,
-  STRATEGY_JWT,
-} = require('../config/constants')
+
 const passportCustom = require('../config/passportCall')
 const sessionController = require('../controllers/session.controller')
+const { STRATEGY_REGISTER,
+  STRATEGY_LOGIN,
+  STRATEGY_GITHUB,
+  STRATEGY_JWT, } = require('../utils/constants')
 
 const router = Router()
 
