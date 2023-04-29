@@ -3,6 +3,7 @@ const ProductsModel = require('../dao/models/products.model')
 const ChatsManagerMongo = require('../dao/MongoManager/chatsManagerMongo')
 const CartsManagerMongo = require('../dao/MongoManager/cartsManagerMongo')
 const ProductManagerMongo = require('../dao/MongoManager/productManagerMongo')
+const { generateProduct } = require('../utils/faker')
 
 const router = Router()
 
@@ -83,5 +84,16 @@ const getProducts = async (req) => {
 
   return products
 }
+
+router.get('/mockingproducts', (req, res) => {
+  const products = []
+  for(let i=0; i < 100; i++){
+    products.push(generateProduct())
+  }
+
+  res.send(products)
+
+  return products
+})
 
 module.exports = router
