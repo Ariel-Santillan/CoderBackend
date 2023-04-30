@@ -1,6 +1,18 @@
 const dotenv = require('dotenv')
+const path = require('path')
+const { program } = require('commander')
 
-dotenv.config()
+program.requiredOption('--mode <mode>', 'Server execution mode')
+program.parse()
+
+const ambiente = program.opts().mode
+
+dotenv.config({
+  path: path.join(
+    __dirname,
+    ambiente == 'production' ? '../.env.production' : '../.env.development'
+  ),
+})
 
 module.exports = {
   PORT: process.env.PORT,
