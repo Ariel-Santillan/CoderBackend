@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { PERSISTANCE: PERSISTENCE, MONGO_URL } = require('../config/config')
+const { PERSISTENCE, MONGO_URL } = require('../config/config')
 
 let productsDao = {};
 let cartsDao = {};
@@ -40,7 +40,7 @@ let ticketsDao = {};
       cartsDao.deleteById = cartsMemory.deleteById
       break
     default:
-      console.log('Undefined Persistance');
+      req.fatal('Undefined Persistence')
       break
   }
 })()
