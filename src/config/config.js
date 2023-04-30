@@ -1,11 +1,27 @@
 const dotenv = require('dotenv')
+const path = require('path')
+const { program } = require('commander')
 
-dotenv.config()
+program.requiredOption('--mode <mode>', 'Server execution mode', 'production')
+program.parse()
+
+const ambiente = program.opts().mode
+
+dotenv.config({
+  path: path.join(
+    __dirname,
+    (ambiente == 'production') ? '../.env.production' : '../.env.development'
+  ),
+})
+
+// console.log('Persistence', process.env.PERSISTENCE);
+// console.log('Port', process.env.PORT);
+
 
 module.exports = {
   PORT: process.env.PORT,
   MONGO_URL: process.env.MONGO_URL,
   ADMIN_NAME: process.env.ADMIN_NAME,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
-  PERSISTENCE: process.env.PERSISTENCE,
+  PERSISTANCE: process.env.PERSISTENCE,
 }
