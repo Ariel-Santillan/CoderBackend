@@ -30,7 +30,8 @@
     "winston": "^3.8.2"
   },
   "scripts": {
-    "dev": "nodemon ./src/app.js"
+    "dev": "SET NODE_ENV=development & nodemon src/app.js",
+    "start": "SET NODE_ENV=production & nodemon src/app.js"
   },
   "repository": {
     "type": "git",
