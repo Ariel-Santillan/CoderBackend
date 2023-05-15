@@ -7,4 +7,5 @@ module.exports = {
   DELETE_PRODUCT: 'Unable to delete product',
   CREATE_USER: 'Unable to create user',
   GET_USER: 'Unable to get the user',
+  UPDATE_USER: 'Error updating user'
 }

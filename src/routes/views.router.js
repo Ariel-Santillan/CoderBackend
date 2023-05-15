@@ -4,6 +4,7 @@ const ChatsManagerMongo = require('../dao/MongoManager/chatsManagerMongo')
 const CartsManagerMongo = require('../dao/MongoManager/cartsManagerMongo')
 const ProductManagerMongo = require('../dao/MongoManager/productManagerMongo')
 const { generateProduct } = require('../utils/faker')
+const { forgotPasswordToken } = require('../controllers/session.controller')
 
 const router = Router()
 
@@ -95,5 +96,8 @@ router.get('/mockingproducts', (req, res) => {
 
   return products
 })
+
+router.get('/forgot-password/:token', forgotPasswordToken)
+
 
 module.exports = router

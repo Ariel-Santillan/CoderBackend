@@ -9,7 +9,7 @@ class CartService {
   
   insert = (cart) => this.dao.insert(cart)
   
-  updateById = (cart, id) => this.dao.updateById(id, cart)
+  updateById = (cart, id) => this.dao.updateById(cart, id)
   
   deleteByID = (id) => this.dao.deleteByID(id)
 }

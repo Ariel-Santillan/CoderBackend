@@ -5,6 +5,11 @@ const generateToken = (payload) => {
   return token
 }
 
+const generateEmailToken = ({ email }) => {
+  const token = jwt.sign({ email }, JWT_PRIVATEKEY, { expiresIn: '1h' })
+  return token
+}
+
 const getPayload = (req, res, next) => {
   const headerAuth = req.headers.authorization
 
@@ -31,4 +36,5 @@ const getPayload = (req, res, next) => {
 module.exports = {
   generateToken,
   getPayload,
+  generateEmailToken,
 }

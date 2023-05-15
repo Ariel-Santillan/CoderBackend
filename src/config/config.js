@@ -30,4 +30,6 @@ module.exports = {
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
 
   PERSISTENCE: process.env.PERSISTENCE,
+  USERMAILING: process.env.USERMAILING,
+  USERPASSWORD: process.env.USERPASSWORD,
 }

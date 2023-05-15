@@ -7,7 +7,7 @@ class CartsDaoMongo {
 
   insert = (cart) => CartsModel.create(cart)
 
-  updateById = (cart, id) => CartsModel.findByIdAndUpdate(id, cart)
+  updateById = (cart, id) => CartsModel.updateOne({ _id: id }, cart)
 
   deleteById = (id) => CartsModel.deleteById(id)
 }

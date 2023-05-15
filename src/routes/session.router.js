@@ -52,4 +52,10 @@ router.get(
   passportCustom(STRATEGY_JWT),
   sessionController.getCurrent
 )
+
+router.post('/forgot-password', sessionController.forgotPassword)
+
+router.post('/reset-password', sessionController.resetPassword)
+
+
 module.exports = router

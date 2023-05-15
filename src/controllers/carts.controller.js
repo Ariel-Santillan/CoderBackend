@@ -6,6 +6,7 @@ const {
 } = require('../config/carts')
 const { v4: uuidv4 } = require('uuid')
 const UserDTO = require('../dao/DTOs/user.dto')
+const mailingService = require('../services/mailing.service')
 
 const create = async (req, res) => {
   try {
@@ -51,6 +52,36 @@ const getByID = async (req, res) => {
   }
 }
 
+const addProduct = async (req, res) => {
+try {
+  const { cid, pid } = req.params
+  const cartFound = await cartService.getById(cid)
+  const productFound = await productService.getById(pid)
+  const mapsIds = cartFound.products.map( product => product.product._id.toString() )
+  mapsIds.push(productFound._id.toString())
+
+  const { productCartList } = await mapProductCart(mapsIds)
+
+  const cartUpdated = {
+    products: productCartList,
+    totalQuantity: productCartList.length,
+    totalPrice: calculateCartTotal(productCartList),
+  }
+
+  cartService.updateById(cartUpdated, cid)
+
+  return res.json({
+    status: 'Success',
+    payload: cartUpdated,
+  })
+} catch (error) {
+  console.log(error);
+  return res.status(500).json({
+    status: 'Error',
+    payload: error.message,
+  })
+}
+}
 const deleteProduct = async (req, res) => {
   try {
     const { cid, pid } = req.params
@@ -140,7 +171,7 @@ const updateProductQuantity = async (req, res) => {
 
     cart.products[indexProduct].quantity += quantity
 
-    cart = setCart(cart)
+    cart = setCart(cart, pid)
 
     await cartService.updateById(cid, cart)
 
@@ -180,7 +211,7 @@ const validateProductOnDB = async (pid) => {
   }
 }
 
-const setCart = async (cart) => {
+const setCart = async (cart, pid) => {
   cart.products.filter((product) => product._id != pid)
   cart.totalQuantity = cart.products.length
   cart.totalPrice = calculateCartTotal(cart.products)
@@ -264,10 +295,11 @@ const purchaseCart = async (req, res) => {
     })
   }
 }
+
 module.exports = {
   create,
   getByID,
-  // addProduct,
+  addProduct,
   deleteProduct,
   updateAllProducts,
   updateProductQuantity,
