@@ -30,6 +30,17 @@ const productsSchema = new mongoose.Schema({
     type: Boolean,
     require: true,
   },
+  owner: {
+    type: [
+      {
+        owner: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'users',
+        },
+      },
+    ],
+    default: [],
+  },
 })
 
 productsSchema.plugin(paginate)

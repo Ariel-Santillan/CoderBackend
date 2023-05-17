@@ -1,6 +1,7 @@
 const formLogin = document.getElementById('formLogin')
 const email = document.getElementById('email')
 const password = document.getElementById('password')
+const forgotPassword = document.getElementById('forgot-password')
 
 formLogin.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -20,4 +21,9 @@ formLogin.addEventListener('submit', (e) => {
     .catch((err) => {
       window.alert('Error al iniciar sesion')
     })
+})
+
+forgotPassword.addEventListener('click', (e)=>{
+  e.preventDefault()
+  window.location.href = '/forgot-password'
 })

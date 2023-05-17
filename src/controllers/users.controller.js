@@ -63,4 +63,15 @@ try {
 }
 }
 
-module.exports = { login , register, logout}
+const changePremium = async (req, res) => {
+  const user = req.session.user
+  const role = user.role
+  if(role == 'premium') {
+    user.role = 'user'
+  } else if (role == 'user') {
+    user.role = 'premium'
+  }
+  return req.session.user = user
+}
+
+module.exports = { login , register, logout, changePremium}

@@ -17,6 +17,7 @@ const { MONGO_URL, PORT } = require('./config/config')
 const { mdwError } = require('./utils/errorHandler')
 const mdwLogger = require('./utils/logger')
 const loggerRouter = require('./routes/logger.router')
+const usersRouter = require('./routes/users.router')
 
 //Express
 server.use(express.json())
@@ -62,6 +63,7 @@ server.use('/api/chats', chatsRouter)
 server.use('/', viewsRouter)
 server.use('/api/sessions', sessionRouter)
 server.use('/loggerTest', loggerRouter)
+server.use('/api/users', usersRouter)
 
 //Socket io
 const httpServer = server.listen(PORT, () => {

@@ -68,7 +68,7 @@ try {
     totalPrice: calculateCartTotal(productCartList),
   }
 
-  cartService.updateById(cartUpdated, cid)
+  await cartService.updateById(cartUpdated, cid)
 
   return res.json({
     status: 'Success',

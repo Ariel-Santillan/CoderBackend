@@ -1,9 +1,16 @@
-const usersManagerMongo = require("../dao/MongoManager/usersManagerMongo")
+class UserService {
+  constructor(dao) {
+    this.dao = dao
+  }
+  login = async (email, password) => this.dao.login(email, password)
 
-const login = async (email, password) => usersManagerMongo.login(email, password)
+  register = async (user) => this.dao.register(user)
+  
+  getByID = async (id) => this.dao.getByID(id)
+  
+  insert = (cart) => this.dao.insert(cart)
 
-const register = async (user) => usersManagerMongo.register(user)
+  getByEmail = (email) => this.dao.getByEmail(email)
+}
 
-const getByID = async (id) => usersManagerMongo.getByID(id)
-
-module.exports = {login, register, getByID}
+module.exports = UserService

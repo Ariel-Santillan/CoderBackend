@@ -40,7 +40,14 @@ const getProductById = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const product = req.body
+    const {owner, ...product} = req.body
+    if(!owner){
+      product.owner = 'admin'
+    }
+
+    if(owner == 'premium'){
+      product.owner = owner.owner.email
+    }
     const productAdded = await productService.insert(product)
     emitAddProduct(productAdded)
 

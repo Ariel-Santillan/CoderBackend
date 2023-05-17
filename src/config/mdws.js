@@ -18,4 +18,14 @@ const mdwUserSession = (req, res, next) => {
   next()
 }
 
-module.exports = { mdwOnlyAdmin, mdwUserSession }
+const mdwUserPremium = (req, res, next) => {
+  if (!req.session.user.role == 'premium') {
+    return res.json(401).json({
+      status: 'error',
+      msg: 'Usuario no autorizado',
+    })
+  }
+  next()
+}
+
+module.exports = { mdwOnlyAdmin, mdwUserSession, mdwUserPremium }

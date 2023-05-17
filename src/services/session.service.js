@@ -3,7 +3,7 @@ class SessionService {
     this.dao = dao
   }
 
-  getByEmail = (email) => this.dao.getById({email: email})
+  getByEmail = async (email) => this.dao.getByEmail(email)
 
 }
 

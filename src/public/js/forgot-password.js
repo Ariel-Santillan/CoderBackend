@@ -1,17 +1,14 @@
-const form = document.getElementById('form');
+const form = document.getElementById('recoverForm')
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  fetch('/api/session/forgot-password', {
+form.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const email = document.getElementById('email').value
+  console.log(email)
+  const response = await fetch('/api/sessions/forgot-password', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email }),
   })
-    .then((res) => res.json())
-    .then((data) => alert(data))
-    .catch((err) => alert(err));
-});
+})

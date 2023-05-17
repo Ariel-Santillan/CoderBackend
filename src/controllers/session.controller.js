@@ -1,15 +1,10 @@
-const { generateEmailToken } = require('../config/jwt')
-const UsersModel = require('../dao/models/users.model')
-const SessionService = require('../services/session.service')
-const {
-  COOKIE_USER,
-  FORGOT_PASSWORD_MESSAGE,
-  FORGOT_PASSWORD_SUBJECT,
-} = require('../utils/constants')
-const jwt = require('jsonwebtoken')
+const { generateToken } = require('../config/jwt')
+const { FORGOT_PASSWORD_SUBJECT } = require('../utils/constants')
 const CustomError = require('../utils/customError')
-
-const sessionService = new SessionService()
+const { passwordHash, passwordCompare } = require('../config/bcrypt')
+const UsersDaoMongo = require('../dao/user.dao')
+const { userService } = require('../services')
+const mailingService = require('../services/mailing.service')
 
 const login = async (req, res) => {
   req.session.user = {
@@ -29,47 +24,72 @@ const register = async (req, res) => {
 const getCurrent = async (req, res) => {
   res.send(req.user)
 }
-const forgotPassword = async (req, res) => {
+
+const forgotPassword = async (req, res, next) => {
   try {
-    const { email } = req.body
-    const user = await sessionService.getByEmail(email)
-
-    const token = generateEmailToken(email)
-
+    let { email } = req.body
+    const user = await userService.getByEmail(email)
     if (!user) {
-      return next (CustomError.createError({code:ERROR_USER, msg: invalidEmail(), typeError:"ERROR_USER"})) 
+      return next(
+        CustomError.createError({
+          code: ERROR_USER,
+          msg: invalidEmail(),
+          typeError: 'ERROR_USER',
+        })
+      )
     }
-    //Send email
-    const emailMessage =
-      'a href=`//localhost:8080/forgot-password/${token}`>Reset password</a>'
+    const token = generateToken({ id: user.id })
     mailingService.sendMail({
-      to: req.user.email,
+      to: email,
       subject: FORGOT_PASSWORD_SUBJECT,
-      html: emailMessage,
+      html: `<a href="http://localhost:8080/api/sessions/redirectForgotPassword/${token}">Reset password</a>`,
     })
-  } catch (error) {}
-  if (req.session.user) {
-    res.render('perfil', { name: req.session.user.first_name })
-  } else {
-    res.render('forgot-password')
+    res.json({
+      status: 'Success',
+      message: 'Recover password email sent',
+    })
+  } catch (error) {
+    return res.send({ status: 'error', message: 'Invalid email' })
   }
 }
 
-const forgotPasswordToken = async (req, res) => {
-  res.cookie('token', token, { httpOnly: true, secure: true })
+const redirectRecoverPassword = (req, res, next) => {
+  try {
+    const token = req.params.token
+    res.cookie('token', token).redirect(`/recover-password`)
+  } catch (error) {
+    next(error)
+  }
 }
 
-const resetPassword = async (req, res) => {
-  const { password } = req.body
-  token = req.cookie.token
-  jwt.verify(token, JWT_PRIVATEKEY, (e, credential) => {
-    console.log(credential)
-    if (e) {
-      res.send('New password cannot be the same as old password')
+const recoverPassword = async (req, res, next) => {
+  console.log("body", req.body);
+  console.log("payload", req.payload);
+  try {
+    const password = passwordCompare(
+      req.body.password,
+      req.payload.password
+    )
+    if (!password) {
+      const hashNewPassword = passwordHash(req.body.password)
+      await UsersDaoMongo.updatePassword(
+        hashNewPassword,
+        req.payload.id
+      )
+
+      return res.cookie('token', '', { maxAge: 1 }).status(202).json({
+        status: 'Success',
+        message: 'Password changed successfully',
+      })
     } else {
-      UsersModel.updateOne({ email }, { password: hash })
+      res.status(403).json({
+        status: 'error',
+        message: 'The new password cannot be the same as the old one',
+      })
     }
-  })
+  } catch (error) {
+    next(error)
+  }
 }
 
 module.exports = {
@@ -77,6 +97,6 @@ module.exports = {
   register,
   getCurrent,
   forgotPassword,
-  forgotPasswordToken,
-  resetPassword,
+  redirectRecoverPassword,
+  recoverPassword,
 }
