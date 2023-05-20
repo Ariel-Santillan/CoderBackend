@@ -1,5 +1,5 @@
-const { generateToken } = require('../config/jwt')
-const { FORGOT_PASSWORD_SUBJECT } = require('../utils/constants')
+const { generateToken, getUserByToken } = require('../config/jwt')
+const { FORGOT_PASSWORD_SUBJECT, COOKIE_USER } = require('../utils/constants')
 const CustomError = require('../utils/customError')
 const { passwordHash, passwordCompare } = require('../config/bcrypt')
 const UsersDaoMongo = require('../dao/user.dao')
@@ -14,7 +14,7 @@ const login = async (req, res) => {
     email: req.user.email,
   }
   res
-    .cookie(COOKIE_USERER, req.user.token, { maxAge: 300000, httpOnly: true })
+    .cookie(COOKIE_USER, req.user.token, { maxAge: 300000, httpOnly: true })
     .send(req.user)
 }
 
@@ -42,7 +42,7 @@ const forgotPassword = async (req, res, next) => {
     mailingService.sendMail({
       to: email,
       subject: FORGOT_PASSWORD_SUBJECT,
-      html: `<a href="http://localhost:8080/api/sessions/redirectForgotPassword/${token}">Reset password</a>`,
+      html: `<a href="http://localhost:8080/recover-password?token=${token}">Reset password</a>`,
     })
     res.json({
       status: 'Success',
@@ -53,40 +53,44 @@ const forgotPassword = async (req, res, next) => {
   }
 }
 
-const redirectRecoverPassword = (req, res, next) => {
-  try {
-    const token = req.params.token
-    res.cookie('token', token).redirect(`/recover-password`)
-  } catch (error) {
-    next(error)
-  }
-}
-
 const recoverPassword = async (req, res, next) => {
-  console.log("body", req.body);
-  console.log("payload", req.payload);
   try {
-    const password = passwordCompare(
-      req.body.password,
-      req.payload.password
-    )
-    if (!password) {
-      const hashNewPassword = passwordHash(req.body.password)
+    const newPassword = req.body
+    const token = req.params.token
+
+    const user = await getUserByToken(token)
+    
+        console.log(newPassword);
+        console.log(token);
+        console.log(user);
+
+    if(!user) {
+      return res.status(403).json({
+        status: 'Error',
+        message: 'Invalid token'
+      })
+    }
+
+    const passwordMatches = passwordCompare(newPassword, user.password)
+
+    if(passwordMatches){
+      return res.status(403).json({
+        status: 'Error',
+        message: 'New password cannot be the same as the old one'
+      })
+    }
+
+      const hashNewPassword = passwordHash(newPassword)
+      
       await UsersDaoMongo.updatePassword(
         hashNewPassword,
-        req.payload.id
+        user.id
       )
 
       return res.cookie('token', '', { maxAge: 1 }).status(202).json({
         status: 'Success',
         message: 'Password changed successfully',
       })
-    } else {
-      res.status(403).json({
-        status: 'error',
-        message: 'The new password cannot be the same as the old one',
-      })
-    }
   } catch (error) {
     next(error)
   }
@@ -97,6 +101,5 @@ module.exports = {
   register,
   getCurrent,
   forgotPassword,
-  redirectRecoverPassword,
   recoverPassword,
 }
