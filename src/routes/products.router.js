@@ -19,7 +19,7 @@ router.get('/:pid', productsController.getProductById)
 router.post(
   '/',
   multerUtils.single('file'),
-  mdwUserPremium,
+  // mdwUserPremium,
   productsController.addProduct
 )
 
@@ -28,12 +28,14 @@ router.post(
 router.put(
   '/:pid',
   multerUtils.single('file'),
-  mdwOnlyAdmin,
+  // mdwOnlyAdmin,
   productsController.updateProduct
 )
 
 //Delete product by ID
 
-router.delete('/:pid', mdwOnlyAdmin, productsController.deleteProduct)
+router.delete('/:pid', 
+// mdwOnlyAdmin, 
+productsController.deleteProduct)
 
 module.exports = router

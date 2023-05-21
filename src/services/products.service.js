@@ -9,7 +9,12 @@ class ProductService {
 
   insert = (product) => this.dao.insert(product)
 
-  updateById = (product, id) => this.dao.updateById(id, product)
+  updateById = (product, id) => {
+    console.log('dao', dao)
+    console.log('product', product)
+    console.log('id', id)
+    return this.dao.updateById(product, id)
+  }
 
   deleteByID = (id) => this.dao.deleteByID(id)
 

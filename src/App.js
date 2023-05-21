@@ -18,6 +18,23 @@ const { mdwError } = require('./utils/errorHandler')
 const mdwLogger = require('./utils/logger')
 const loggerRouter = require('./routes/logger.router')
 const usersRouter = require('./routes/users.router')
+const swaggerJsdoc = require('swagger-jsdoc')
+const swaggerUIExpress = require('swagger-ui-express')
+
+//Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API',
+      description: 'API Ecommerce'
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yml`]
+}
+
+const spec = swaggerJsdoc(swaggerOptions)
+server.use('/api-docs', swaggerUIExpress.serve, swaggerUIExpress.setup(spec))
 
 //Express
 server.use(express.json())
