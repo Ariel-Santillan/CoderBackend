@@ -1,0 +1,44 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get all products
+      tags: 
+        - "Products"
+      responses:
+        "200":
+          description: Products retrieved successfully
+        "500":
+          description: Internal server error
+  /api/products/{pid}:
+    put:
+      summary: Update product by ID
+      tags:
+        - "Products"
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Product ID desired to update
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Product retrieved successfully
+        "500":
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+
+components:
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        price: 
+          type: String
+          description: New product price
+      example:
+        price: "2000"

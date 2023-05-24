@@ -1,0 +1,88 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Get cart by ID
+      tags:
+        - "Carts"
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: Cart ID desired to retrieve
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Cart retrieved successfully
+        "500":
+          description: Internal server error
+  /api/carts/:
+    post:
+      summary: Create a new cart
+      tags:
+        - "Carts"
+      responses:
+        "200":
+          description: Cart created successfully
+        "500":
+          description: Internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/createCart'
+  /api/carts/{cid}/product/{pid}:
+    delete:
+      summary: Delete product on cart by ID
+      tags:
+        - "Carts"
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Product ID to delete
+        schema:
+          $type: String
+      - name: cid
+        in: path
+        required: true
+        description: Cart ID to delete
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Product successfully deleted from Cart
+        "500":
+          description: Internal server error
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Purchase cart by ID
+      tags:
+        - "Carts"
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: Cart ID desired to purchase
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Cart purchased successfully
+        "500":
+          description: Internal server error
+
+components:
+  requestBodies:
+    createCart:
+      type: object
+      properties:
+        product: 
+          type: Array
+          description: Products IDs to add to the cart
+        cart: 
+          type: Array
+          description: User ID to add to the cart 
+      example:
+        products: ["63f5743e7b20b0b0675f165b", "63f5748c7b20b0b0675f165d"]
+        user: ["641a51f4d77b94167bec5b78"]
