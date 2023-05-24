@@ -11,7 +11,7 @@ router.post('/', cartsController.create)
 //Cart By ID
 router.get('/:cid', cartsController.getByID)
 
-//Add Product to Cart ID ver si hace falta
+//Add Product to Cart ID
 router.post('/:cid/product/:pid', cartsController.addProduct)
 
 //Delete Product from Cart ID

@@ -27,6 +27,7 @@ let userDao = {};
       cartsDao.deleteById = cartsMongoPersistance.deleteById
       ticketsDao.insert = ticketsMongoPersistance.insert
       userDao.getByEmail = userMongoPersistance.getByEmail
+      userDao.getByID = userMongoPersistance.getByID
       break
     case 'MEMORY':
       const productsMemory = await require('./productsMemory.dao')

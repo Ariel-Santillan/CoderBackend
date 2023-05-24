@@ -14,6 +14,14 @@ router.get('/', productsController.getProducts)
 
 router.get('/:pid', productsController.getProductById)
 
+//Update product
+
+router.put(
+  '/:pid',
+  multerUtils.single('file'),
+  // mdwOnlyAdmin,
+  productsController.updateProduct
+)
 //Add product
 
 router.post(
@@ -23,14 +31,6 @@ router.post(
   productsController.addProduct
 )
 
-//Update product
-
-router.put(
-  '/:pid',
-  multerUtils.single('file'),
-  // mdwOnlyAdmin,
-  productsController.updateProduct
-)
 
 //Delete product by ID
 
