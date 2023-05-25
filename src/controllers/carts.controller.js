@@ -13,7 +13,6 @@ const create = async (req, res) => {
     const { products = [], users } = req.body
     const { productCartList, productsNotFound } = await mapProductCart(products)
     const userFound = await getUserByID(users)
-    console.log(userFound);
     let userDTO = new UserDTO(userFound)
     userDTO.user = users
     const cart = {

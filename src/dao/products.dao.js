@@ -9,7 +9,7 @@ class ProductsDaoMongo {
 
   updateById = (product, id) => ProductsModel.findByIdAndUpdate(id, product)
 
-  deleteById = (id) => ProductsModel.deleteById(id)
+  deleteById = (id) => ProductsModel.deleteOne({_id: id})
 
   getAllProductsByIDs = (ids) => ProductsModel.find({ _id: { $in: ids } })
 }

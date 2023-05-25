@@ -11,7 +11,7 @@ class ProductService {
 
   updateById = (product, id) => this.dao.updateById(product, id)
 
-  deleteByID = (id) => this.dao.deleteByID(id)
+  deleteByID = (id) => this.dao.deleteById(id)
 
   getAllProductsByIDs = (ids) => this.dao.getAllProductsByIDs(ids)
 }
