@@ -4,6 +4,10 @@ const calculateCartTotal = (products) => {
   return products.reduce((acc, curr) => acc + curr.unitValue * curr.quantity, 0)
 }
 
+const calculateTicketTotal = (products) => {
+  return products.reduce((acc, curr) => acc + curr._doc.unitValue * curr._doc.quantity, 0)
+}
+
 const mapProductCart = async (products) => {
   let productCartList = []
   let productsNotFound = []
@@ -40,5 +44,6 @@ const getUserByID = async (id) => {
 module.exports = {
   calculateCartTotal,
   mapProductCart,
-  getUserByID
+  getUserByID,
+  calculateTicketTotal
 }

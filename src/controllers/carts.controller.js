@@ -3,6 +3,7 @@ const {
   mapProductCart,
   calculateCartTotal,
   getUserByID,
+  calculateTicketTotal,
 } = require('../config/carts')
 const { v4: uuidv4 } = require('uuid')
 const UserDTO = require('../dao/DTOs/user.dto')
@@ -261,7 +262,7 @@ const purchaseCart = async (req, res) => {
 
     //If any product was able to purchase, then create the ticket
     if (productsPurchased.length > 0) {
-      ticketAmount = calculateCartTotal(productsPurchased)
+      ticketAmount = calculateTicketTotal(productsPurchased)
 
       ticket = {
         code: uuidv4(),
@@ -276,7 +277,7 @@ const purchaseCart = async (req, res) => {
     let cartProductsNotPurchased = {}
     if (productsNotPurchased.length > 0) {
       cartProductsNotPurchased = {
-        totalPrice: calculateCartTotal(productsNotPurchased),
+        totalPrice: calculateTicketTotal(productsNotPurchased),
         totalQuantity: productsNotPurchased.length,
         products: productsNotPurchased,
       }
