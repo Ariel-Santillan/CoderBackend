@@ -14,4 +14,15 @@ const generateProduct = () => {
   }
 }
 
-module.exports = { generateProduct }
+const generateUser = () => {
+  return {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.random.alphaNumeric(8),
+    age: faker.random.numeric(2),
+    role: "premium" 
+  }
+}
+
+module.exports = { generateProduct, generateUser }
