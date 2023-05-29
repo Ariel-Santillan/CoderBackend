@@ -284,13 +284,15 @@ const purchaseCart = async (req, res) => {
 
     res.json({
       status: 'ok',
-      msg: 'Ticket creado',
-      ticket,
+      payload: {
+        msg: 'Ticket creado',
+        ticket,
+      }
     })
   } catch (error) {
     res.json({
       status: 'error',
-      msg: error.message,
+      payload: error.message,
     })
   }
 }
