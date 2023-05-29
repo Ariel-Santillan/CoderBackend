@@ -41,11 +41,9 @@ const InitPassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          console.log('jwt')
           const { payload } = jwt_payload
           const user = await UsersModel.findById(payload.id)
           delete user._doc.password
-          console.log(user)
           done(null, { user: user._doc })
         } catch (error) {
           done(error)

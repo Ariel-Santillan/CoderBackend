@@ -59,10 +59,6 @@ const recoverPassword = async (req, res, next) => {
     const token = req.params.token
 
     const user = await getUserByToken(token)
-    
-        console.log(newPassword);
-        console.log(token);
-        console.log(user);
 
     if(!user) {
       return res.status(403).json({

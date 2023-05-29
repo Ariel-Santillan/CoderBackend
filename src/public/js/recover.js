@@ -15,7 +15,6 @@ form.addEventListener('submit', (event) => {
   })
     .then((result) => result.json())
     .then((json) => {
-      console.log("then", json)
       if (json.status == 'success') {
         Swal.fire({
           icon: 'success',
@@ -23,7 +22,6 @@ form.addEventListener('submit', (event) => {
           text: 'Abrelo para poder reestablecer tu contraseña',
         })
       } else {
-        console.log("else", json);
         Swal.fire({
           icon: 'error',
           title: 'Oops, the credentials arent valid',
@@ -32,7 +30,6 @@ form.addEventListener('submit', (event) => {
       }
     })
     .catch((error) => {
-      console.log("error", error);
       Swal.fire({
         icon: 'error',
         title: 'Oops, the credentials arent valid',

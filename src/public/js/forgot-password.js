@@ -3,7 +3,6 @@ const form = document.getElementById('recoverForm')
 form.addEventListener('submit', async (e) => {
   e.preventDefault()
   const email = document.getElementById('email').value
-  console.log(email)
   const response = await fetch('/api/sessions/forgot-password', {
     method: 'POST',
     headers: {

@@ -76,7 +76,6 @@ try {
     payload: cartUpdated,
   })
 } catch (error) {
-  console.log(error);
   return res.status(500).json({
     status: 'Error',
     payload: error.message,
@@ -256,7 +255,6 @@ const purchaseCart = async (req, res) => {
     let ticketAmount = 0
     let ticket = {}
 
-    // console.log(cartFound.users[0].user);
     const userFound = await getUserByID(cartFound.users[0].user)
     const purchaser = userFound.email
 
