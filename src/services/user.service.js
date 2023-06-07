@@ -12,6 +12,8 @@ class UserService {
   insert = (cart) => this.dao.insert(cart)
 
   getByEmail = (email) => this.dao.getByEmail(email)
+
+  updateLastConnection = (id, user) => this.dao.updateById(user, id)
 }
 
 module.exports = UserService

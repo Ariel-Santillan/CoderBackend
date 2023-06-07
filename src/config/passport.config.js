@@ -14,6 +14,8 @@ const {  STRATEGY_REGISTER,
   STRATEGY_JWT,
   JWT_PRIVATEKEY,
   COOKIE_USER, } = require('../utils/constants')
+const { userService } = require('../services')
+const { now, default: mongoose } = require('mongoose')
 
 //username y password
 const JWTEstrategy = jwt.Strategy
@@ -91,7 +93,8 @@ const InitPassport = () => {
       { usernameField: 'email' },
       async (username, password, done) => {
         try {
-          const user = await UsersModel.findOne({ email: username })
+          let user = {}
+          user = await UsersModel.findOne({ email: username })
           if (!user) {
             console.log('User doesn´t exists')
             done(null, false)
@@ -102,6 +105,8 @@ const InitPassport = () => {
           }
           const token = generateToken({ id: user.id, rol: user.role })
           if(token){
+            user.last_connection = mongoose.now()
+            await userService.updateLastConnection(user.id, user)
             done(null, {user: user, token:token})
           }
         } catch (error) {

@@ -27,9 +27,8 @@ const UserSchema = new mongoose.Schema({
     integer: true,
   },
   cart: {
-    
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'carts',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'carts',
   },
   role: {
     type: String,
@@ -37,6 +36,15 @@ const UserSchema = new mongoose.Schema({
     enum: roles,
     required: true,
   },
+  documents: {
+    type: [
+      
+    ]
+  },
+  last_connection: {
+    type: String,
+    default: mongoose.now()
+  }
 })
 
 const UsersModel = mongoose.model(usersCollection, UserSchema)
