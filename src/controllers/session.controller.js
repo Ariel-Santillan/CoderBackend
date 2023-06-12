@@ -92,10 +92,52 @@ const recoverPassword = async (req, res, next) => {
   }
 }
 
+const uploadDocs = async (req, res, next) => {
+  try {
+    //por que es innecesario ? 
+    let user = req.user
+
+    let userDocuments = [];
+
+
+    user.documents.forEach((element) => {
+      userDocuments.push(element.name);
+    });
+
+    if(userDocuments.findIndex((value)=>value==req.body.typeDocument)!=-1 && req.body.typeDocument != 'product' && req.body.typeDocument != 'thumbnail'){
+      return res.status(403).send({status:'error', message:'Archivo ya subido'})
+    }
+
+    
+    //validar si es product (req.body.typeDocument)
+    //si producto revisar que venga el pid que puede venir por el body (o por params)
+    // actualizar producto el thumbnail
+
+    //es de tipo producto y no viene el pid retorno error falta pid
+
+
+
+    await BdSessionManager.editOneById(req.user.id,{
+      documents:[
+        ...req.user.documents,
+        {
+          name: req.body.typeDocument,
+          reference: `/documents/${req.route}/${req.filename}`
+        }
+      ]
+    })
+
+    res.send({ status: 'Ok', message: 'Archivos guardados correctamente' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   login,
   register,
   getCurrent,
   forgotPassword,
   recoverPassword,
+  uploadDocs
 }

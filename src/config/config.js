@@ -20,6 +20,12 @@ dotenv.config({
   ),
 })
 
+const TYPE_DOCUMENTS = [
+  'Identificación'
+  ,'Comprobante de domicilio',
+  'Comprobante de estado de cuenta'
+]
+
 module.exports = {
   PORT: process.env.PORT,
 
@@ -32,4 +38,5 @@ module.exports = {
   PERSISTENCE: process.env.PERSISTENCE,
   USERMAILING: process.env.USERMAILING,
   USERPASSWORD: process.env.USERPASSWORD,
+  TYPE_DOCUMENTS
 }

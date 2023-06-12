@@ -7,6 +7,7 @@ class UserDTO {
     this.email = user.email,
     this.role = user.role
     this.cart = user.cart
+    this.documents = user.documents
   }
 }
 

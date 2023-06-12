@@ -38,13 +38,17 @@ const UserSchema = new mongoose.Schema({
   },
   documents: {
     type: [
-      
-    ]
+      {
+        name: String,
+        reference: String,
+      },
+    ],
+    default: [],
   },
   last_connection: {
     type: String,
-    default: mongoose.now()
-  }
+    default: mongoose.now(),
+  },
 })
 
 const UsersModel = mongoose.model(usersCollection, UserSchema)
