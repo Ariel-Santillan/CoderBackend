@@ -8,12 +8,14 @@ class UserService {
   register = async (user) => this.dao.register(user)
 
   getByID = async (id) => this.dao.getByID(id)
-  
+
   insert = (cart) => this.dao.insert(cart)
 
   getByEmail = (email) => this.dao.getByEmail(email)
 
   updateLastConnection = (id, user) => this.dao.updateById(user, id)
+
+  updateUserDoc = (id, docs) => this.dao.updatedocs(id, docs)
 }
 
 module.exports = UserService

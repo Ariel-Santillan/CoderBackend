@@ -18,7 +18,7 @@ router.get('/:pid', productsController.getProductById)
 
 router.put(
   '/:pid',
-  multerUtils.single('file'),
+  // multerUtils.single('file'),
   // mdwOnlyAdmin,
   productsController.updateProduct
 )
@@ -26,7 +26,7 @@ router.put(
 
 router.post(
   '/',
-  multerUtils.single('file'),
+  // multerUtils.single('file'),
   // mdwUserPremium,
   productsController.addProduct
 )

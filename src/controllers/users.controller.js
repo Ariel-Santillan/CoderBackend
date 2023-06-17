@@ -5,7 +5,7 @@ const userService = require('../services/user.service')
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
-    if(email === ADMIN_NAME && password === ADMIN_PASSWORD){
+    if (email === ADMIN_NAME && password === ADMIN_PASSWORD) {
       req.session.admin = true
       let user = {
         firstName: 'Coder',
@@ -15,7 +15,7 @@ const login = async (req, res) => {
       }
       req.session.user = user
       res.send(user)
-    } else{
+    } else {
       user = await userService.login(email, password)
       if (user) {
         req.session.user = user
@@ -50,28 +50,50 @@ const register = async (req, res) => {
 }
 
 const logout = async (req, res) => {
-try {
-  req.session.destroy(err => {
-    if(!err) res.send('Logout exitoso')
-    else res.status(500).json({
-      status: 'Error',
-      payload: 'Error al desloguearse',
+  try {
+    req.session.destroy((err) => {
+      if (!err) res.send('Logout exitoso')
+      else
+        res.status(500).json({
+          status: 'Error',
+          payload: 'Error al desloguearse',
+        })
     })
-  })
-} catch (error) {
-  
-}
+  } catch (error) {}
 }
 
 const changePremium = async (req, res) => {
   const user = req.session.user
   const role = user.role
-  if(role == 'premium') {
+  if (role == 'premium') {
     user.role = 'user'
   } else if (role == 'user') {
     user.role = 'premium'
   }
-  return req.session.user = user
+  return (req.session.user = user)
 }
 
-module.exports = { login , register, logout, changePremium}
+const uploadDocs = async (req, res) => {
+  try {
+    const { user } = req.user
+
+    let userDocuments = []
+    user.documents.forEach((element) => {
+      userDocuments.push(element.name)
+    })
+    await userService.updateUserDoc(user.id, {
+      documents: [
+        ...user.documents,
+        {
+          name: req.body.typeDocument,
+          reference: req.route,
+        },
+      ],
+    })
+    res.send({ status: 'sucsses', msg: 'File/s successfully saved' })
+  } catch (error) {
+    res.send({ status: 'error', msg: error.message })
+  }
+}
+
+module.exports = { login, register, logout, changePremium, uploadDocs }

@@ -15,6 +15,9 @@ class UsersDaoMongo {
     UsersModel.findByIdAndUpdate(id, { password: newPassword })
 
   getByEmail = async (email) => UsersModel.find({email: email})
+
+  updatedocs = (id, docs) => UsersModel.findByIdAndUpdate(id , docs)
+
 }
 
 module.exports = new UsersDaoMongo()

@@ -4,7 +4,6 @@ class SessionService {
   }
 
   getByEmail = async (email) => this.dao.getByEmail(email)
-
 }
 
 module.exports = SessionService

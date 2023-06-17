@@ -4,10 +4,12 @@ const passport = require('passport')
 
 const passportCustom = require('../config/passportCall')
 const sessionController = require('../controllers/session.controller')
-const { STRATEGY_REGISTER,
+const {
+  STRATEGY_REGISTER,
   STRATEGY_LOGIN,
   STRATEGY_GITHUB,
-  STRATEGY_JWT, } = require('../utils/constants')
+  STRATEGY_JWT,
+} = require('../utils/constants')
 const multerUtils = require('../utils/multer.utils')
 
 const router = Router()
@@ -54,19 +56,8 @@ router.get(
   sessionController.getCurrent
 )
 
-router.post('/forgot-password', sessionController.forgotPassword);
+router.post('/forgot-password', sessionController.forgotPassword)
 
-router.post('/reset-password/:token', sessionController.recoverPassword);
-
-router.post(
-  '/:uid/documents',
-  (req, res, next) => {
-    next();
-  },
-  multerUtils.fields('file'),
-  // saveDocs,
-  // viewSession.uploadDocs
-);
-
+router.post('/reset-password/:token', sessionController.recoverPassword)
 
 module.exports = router
