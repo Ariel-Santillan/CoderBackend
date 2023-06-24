@@ -1,6 +1,7 @@
 const { ADMIN_NAME, ADMIN_PASSWORD } = require('../config/config')
 const UserDTO = require('../dao/DTOs/user.dto')
-const userService = require('../services/user.service')
+const { userService } = require('../services')
+
 
 const login = async (req, res) => {
   try {
@@ -96,4 +97,14 @@ const uploadDocs = async (req, res) => {
   }
 }
 
-module.exports = { login, register, logout, changePremium, uploadDocs }
+const getAll = async (req, res) => {
+  try {
+    const allUsers = await userService.getAll()
+    res.send({ status: 'success', msg: allUsers })
+  } catch (error) {
+    res.send({ status: 'error', msg: error.message })
+  }
+
+}
+
+module.exports = { login, register, logout, changePremium, uploadDocs, getAll }
