@@ -16,6 +16,10 @@ class UserService {
   updateLastConnection = (id, user) => this.dao.updateById(user, id)
 
   updateUserDoc = (id, docs) => this.dao.updatedocs(id, docs)
+
+  getAll = async () => this.dao.getAll()
+
+  deletedByID = async (id) => this.dao.deletedByID(id)
 }
 
 module.exports = UserService

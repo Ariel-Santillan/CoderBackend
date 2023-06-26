@@ -21,9 +21,9 @@ dotenv.config({
 })
 
 const TYPE_DOCUMENTS = [
-  'Identificación'
-  ,'Comprobante de domicilio',
-  'Comprobante de estado de cuenta'
+  'Identificación',
+  'Comprobante de domicilio',
+  'Comprobante de estado de cuenta',
 ]
 
 module.exports = {
@@ -38,5 +38,7 @@ module.exports = {
   PERSISTENCE: process.env.PERSISTENCE,
   USERMAILING: process.env.USERMAILING,
   USERPASSWORD: process.env.USERPASSWORD,
-  TYPE_DOCUMENTS
+  TYPE_DOCUMENTS,
+  STRIPE_KEY: process.env.STRIPE_KEY,
+  DELETE_ACCOUNT_SUBJECT: process.env.DELETE_ACCOUNT_SUBJECT
 }

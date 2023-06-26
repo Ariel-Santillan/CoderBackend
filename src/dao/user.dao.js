@@ -1,7 +1,7 @@
 const UsersModel = require('./models/users.model')
 
 class UsersDaoMongo {
-  get = () => UsersModel.find()
+  getAll = () => UsersModel.find()
 
   getByID = (id) => UsersModel.findById(id)
 
@@ -17,6 +17,8 @@ class UsersDaoMongo {
   getByEmail = async (email) => UsersModel.find({email: email})
 
   updatedocs = (id, docs) => UsersModel.findByIdAndUpdate(id , docs)
+
+  deletedByID = (id) => UsersModel.findByIdAndDelete(id)
 
 }
 
