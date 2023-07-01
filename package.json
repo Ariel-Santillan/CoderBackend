@@ -40,7 +40,7 @@
   },
   "scripts": {
     "dev": "nodemon src/app.js --mode development",
-    "start": "nodemon src/app.js"
+    "start": "nodemon ./src/app.js"
   },
   "repository": {
     "type": "git",
