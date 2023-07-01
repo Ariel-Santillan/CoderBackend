@@ -104,14 +104,12 @@ const uploadDocs = async (req, res) => {
 const getAll = async (req, res) => {
   try {
     const allUsers = await userService.getAll()
-    const allUsersPrimaryData = allUsers.map(
-      user => ({
-        name: user.name,
-        lastname: user.lastName,
-        mail: user.email,
-        role: user.role
-      })
-    )
+    const allUsersPrimaryData = allUsers.map((user) => ({
+      name: user.name,
+      lastname: user.lastName,
+      mail: user.email,
+      role: user.role,
+    }))
     res.send({ status: 'success', msg: allUsersPrimaryData })
   } catch (error) {
     res.send({ status: 'error', msg: error.message })
@@ -149,7 +147,23 @@ const deleteAllInactiveUsers = async (req, res) => {
   } catch (error) {
     return res.json({
       status: 'Error',
-      message: error.message
+      message: error.message,
+    })
+  }
+}
+
+const deleteById = async (req, res) => {
+  try {
+    const userID = req.params.uid
+    const deleted = await userService.deletedByID
+    return res.json({
+      status: 'Success',
+      payload: 'User sucessfully deleted',
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status: 'Error',
+      payload: error.message,
     })
   }
 }
@@ -162,4 +176,5 @@ module.exports = {
   uploadDocs,
   getAll,
   deleteAllInactiveUsers,
+  deleteById,
 }

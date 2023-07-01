@@ -20,4 +20,6 @@ router.get('/', usersController.getAll)
 
 router.delete('/', passportCustom(STRATEGY_JWT), mdwOnlyAdmin, usersController.deleteAllInactiveUsers)
 
+router.delete('/:uid', usersController.deleteById)
+
 module.exports = router

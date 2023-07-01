@@ -4,6 +4,8 @@ const {
   emitAddProduct,
   emitUpdateProduct,
 } = require('../config/socket.io')
+const mailingService = require('../services/mailing.service')
+const { PRODUCT_DELETED_SUBJECT } = require('../config/config')
 // const { body, validationResult } = require('express-validator')
 
 const getProducts = async (req, res) => {
@@ -87,6 +89,14 @@ const deleteProduct = async (req, res) => {
     const deleted = await productService.deleteByID(pid)
     emitDeleteProduct(pid)
     if (deleted) {
+      //Validate if user owner of the product is premium, send email notification
+      if(deleted.owner.role === 'premium'){
+        mailingService.sendMail({
+          to: deleted.owner.email,
+          subject: PRODUCT_DELETED_SUBJECT,
+          html: `The product ${deleted.title} was deleted`,
+        })
+      }
       return res.json({
         status: 'Success',
         payload: 'Product sucessfully deleted',

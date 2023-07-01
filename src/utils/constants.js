@@ -9,7 +9,8 @@ const constants = {
   JWT_PRIVATEKEY: 'SADSADS4A56DSA4DSADSA1245SADSA',
   COOKIE_USER: 'cookie-user',
   FORGOT_PASSWORD_SUBJECT: 'Reset you password',
-  DELETE_ACCOUNT_SUBJECT: 'Your account has been deleted'
+  DELETE_ACCOUNT_SUBJECT: 'Your account has been deleted',
+  PRODUCT_DELETED_SUBJECT: 'A product has been deleted'
 }
 
 module.exports = constants

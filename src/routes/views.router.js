@@ -102,4 +102,8 @@ router.get('/recover-password', (req, res) => {
   res.render('recover-password')
 })
 
+router.get('/manage-users', (req, res) => {
+  res.render('manageUsers')
+})
+
 module.exports = router
